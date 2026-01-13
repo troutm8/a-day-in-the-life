@@ -54,18 +54,34 @@ def wake_up_scene(is_workday):
 def morning_routine(is_workday):
     """Handle the morning routine choices."""
     print_slow("What do you want to do first?")
-    print("\n1. Hit snooze and sleep a bit more")
-    print("2. Get up immediately and check your phone")
-    print("3. Stretch and do some morning exercises")
 
-    choice = get_choice(['1', '2', '3'])
+    if is_workday:
+        print("\n1. Hit snooze and sleep a bit more")
+        print("2. Get up immediately and check your phone")
+        print("3. Stretch and do some morning exercises")
 
-    if choice == '1':
-        return snooze_choice(is_workday)
-    elif choice == '2':
-        return check_phone_choice(is_workday)
+        choice = get_choice(['1', '2', '3'])
+
+        if choice == '1':
+            return snooze_choice(is_workday)
+        elif choice == '2':
+            return check_phone_choice(is_workday)
+        else:
+            return exercise_choice(is_workday)
     else:
-        return exercise_choice(is_workday)
+        # Weekend choices - personalized!
+        print("\n1. Hit snooze and sleep a bit more")
+        print("2. Get up and check on the kids")
+        print("3. Put Koda in the backyard")
+
+        choice = get_choice(['1', '2', '3'])
+
+        if choice == '1':
+            return snooze_choice(is_workday)
+        elif choice == '2':
+            return check_on_kids()
+        else:
+            return let_koda_out()
 
 
 def snooze_choice(is_workday):
@@ -197,6 +213,156 @@ def exercise_choice(is_workday):
             print_slow("You feel centered and at peace.")
             print_slow("It's a perfect mindful weekend!")
             return "mindful_weekend"
+
+
+def check_on_kids():
+    """Handle checking on the kids choice."""
+    print_divider()
+    print_slow("You quietly get out of bed and walk down the hallway.")
+    print_slow("You peek into the kids' rooms...")
+    time.sleep(1)
+
+    # Random scenario
+    scenario = random.choice(['sleeping', 'awake', 'mischief'])
+
+    if scenario == 'sleeping':
+        print_slow("\nThey're both still sleeping peacefully.")
+        print_slow("You smile and head back to enjoy the quiet morning.")
+        print("\nWhat do you do next?")
+        print("1. Make yourself a nice breakfast")
+        print("2. Start a load of laundry while it's quiet")
+
+        choice = get_choice(['1', '2'])
+
+        if choice == '1':
+            print_divider()
+            print_slow("You make a delicious breakfast and enjoy it in peace.")
+            print_slow("When the kids wake up, you're refreshed and ready for family time!")
+            return "peaceful_parent_weekend"
+        else:
+            print_divider()
+            print_slow("You tackle some chores while the house is quiet.")
+            print_slow("You feel accomplished and ahead of the day!")
+            return "productive_parent_weekend"
+
+    elif scenario == 'awake':
+        print_slow("\nThey're awake! Both jumping on the bed excitedly.")
+        print_slow("'Can we have pancakes? Can we go to the park?'")
+        print("\nWhat do you do?")
+        print("1. Make pancakes together")
+        print("2. Promise the park after breakfast")
+
+        choice = get_choice(['1', '2'])
+
+        if choice == '1':
+            print_divider()
+            print_slow("You all head to the kitchen for a pancake-making adventure.")
+            print_slow("There's flour everywhere, but the memories are priceless!")
+            return "fun_parent_weekend"
+        else:
+            print_divider()
+            print_slow("You make a quick breakfast and head to the park.")
+            print_slow("The kids burn off energy and you all have a great day!")
+            return "active_parent_weekend"
+
+    else:  # mischief
+        print_slow("\nUh oh... they're already awake and suspiciously quiet.")
+        print_slow("You find them in the bathroom with shaving cream everywhere!")
+        print("\nHow do you react?")
+        print("1. Laugh it off and start the cleanup")
+        print("2. Sigh and ask them to help clean up")
+
+        choice = get_choice(['1', '2'])
+
+        if choice == '1':
+            print_divider()
+            print_slow("You can't help but laugh at their creativity.")
+            print_slow("You take photos and turn cleanup into a game!")
+            print_slow("It becomes a funny family memory.")
+            return "chaotic_fun_weekend"
+        else:
+            print_divider()
+            print_slow("You teach them responsibility by having them help clean.")
+            print_slow("It takes longer, but they learn an important lesson.")
+            return "teaching_moment_weekend"
+
+
+def let_koda_out():
+    """Handle letting Koda out choice."""
+    print_divider()
+    print_slow("You hear Koda's tail thumping against his bed.")
+    print_slow("He's already awake and ready to go outside!")
+    time.sleep(0.5)
+    print_slow("\nYou open the back door and Koda bounds into the yard.")
+
+    # Random scenario
+    scenario = random.choice(['peaceful', 'squirrel', 'zoomies'])
+
+    if scenario == 'peaceful':
+        print_slow("\nKoda calmly explores the yard, sniffing around.")
+        print_slow("You enjoy your coffee on the back porch, watching him.")
+        print("\nWhat do you do next?")
+        print("1. Stay outside and enjoy the morning air")
+        print("2. Head back in and make a nice breakfast")
+
+        choice = get_choice(['1', '2'])
+
+        if choice == '1':
+            print_divider()
+            print_slow("You and Koda enjoy a peaceful morning outside.")
+            print_slow("It's the perfect way to start the weekend!")
+            return "serene_morning_weekend"
+        else:
+            print_divider()
+            print_slow("You make a delicious breakfast while Koda plays.")
+            print_slow("You feel relaxed and ready for the day ahead.")
+            return "relaxed_morning_weekend"
+
+    elif scenario == 'squirrel':
+        print_slow("\nSuddenly, Koda spots a squirrel!")
+        print_slow("He takes off running and barking at full speed!")
+        print_slow("The squirrel escapes up a tree and Koda circles below, tail wagging.")
+        print("\nWhat do you do?")
+        print("1. Let him enjoy the excitement")
+        print("2. Call him back inside before he wakes the neighbors")
+
+        choice = get_choice(['1', '2'])
+
+        if choice == '1':
+            print_divider()
+            print_slow("You let Koda enjoy his morning adventure.")
+            print_slow("He eventually tires out and comes back happy and exhausted.")
+            print_slow("A tired dog makes for a peaceful weekend!")
+            return "adventurous_dog_weekend"
+        else:
+            print_divider()
+            print_slow("You call Koda back and he reluctantly obeys.")
+            print_slow("You give him treats and play inside instead.")
+            print_slow("Crisis averted - the neighbors are still asleep!")
+            return "responsible_dog_parent_weekend"
+
+    else:  # zoomies
+        print_slow("\nKoda suddenly gets the zoomies!")
+        print_slow("He races around the yard in wild circles at full speed!")
+        print_slow("You can't help but laugh at his pure joy.")
+        print("\nWhat do you do?")
+        print("1. Join in and run around with him")
+        print("2. Record it - this is too funny not to capture")
+
+        choice = get_choice(['1', '2'])
+
+        if choice == '1':
+            print_divider()
+            print_slow("You run around the yard with Koda!")
+            print_slow("Your neighbors think you're crazy, but you don't care.")
+            print_slow("You both get great exercise and have a blast!")
+            return "playful_morning_weekend"
+        else:
+            print_divider()
+            print_slow("You capture the moment on video.")
+            print_slow("Later, you share it and it becomes a hit with friends!")
+            print_slow("Koda's zoomies bring joy to everyone's day.")
+            return "viral_dog_moment_weekend"
 
 
 def main():
