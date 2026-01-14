@@ -39,19 +39,28 @@ def wake_up_scene(is_workday):
     print_slow("Your alarm buzzes insistently on the nightstand.")
     time.sleep(0.5)
 
-    day_type = "WORKDAY" if is_workday else "WEEKEND"
-    print_slow(f"\nYou remember... it's a {day_type}!")
-
+    work_location = None
     if is_workday:
-        print_slow("You have to be at the office by 9 AM.")
+        # Determine which day of the week it is
+        day_of_week = random.choice(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'])
+        print_slow(f"\nYou remember... it's a {day_of_week}!")
+
+        # Office days: Tue, Wed, Thu | WFH days: Mon, Fri
+        if day_of_week in ['Tuesday', 'Wednesday', 'Thursday']:
+            work_location = 'office'
+            print_slow("You need to be at the office by 9 AM.")
+        else:
+            work_location = 'wfh'
+            print_slow("You're working from home today - no commute!")
     else:
+        print_slow("\nYou remember... it's a WEEKEND!")
         print_slow("No obligations today - the whole day is yours!")
 
     print_divider()
-    return morning_routine(is_workday)
+    return morning_routine(is_workday, work_location)
 
 
-def morning_routine(is_workday):
+def morning_routine(is_workday, work_location=None):
     """Handle the morning routine choices."""
     print_slow("What do you want to do first?")
 
@@ -63,11 +72,11 @@ def morning_routine(is_workday):
         choice = get_choice(['1', '2', '3'])
 
         if choice == '1':
-            return snooze_choice(is_workday)
+            return snooze_choice(is_workday, work_location)
         elif choice == '2':
-            return check_phone_choice(is_workday)
+            return check_phone_choice(is_workday, work_location)
         else:
-            return exercise_choice(is_workday)
+            return exercise_choice(is_workday, work_location)
     else:
         # Weekend choices - personalized!
         print("\n1. Hit snooze and sleep a bit more")
@@ -77,14 +86,14 @@ def morning_routine(is_workday):
         choice = get_choice(['1', '2', '3'])
 
         if choice == '1':
-            return snooze_choice(is_workday)
+            return snooze_choice(is_workday, work_location)
         elif choice == '2':
             return check_on_kids()
         else:
             return let_koda_out()
 
 
-def snooze_choice(is_workday):
+def snooze_choice(is_workday, work_location=None):
     """Handle the snooze button choice."""
     print_divider()
     print_slow("You hit the snooze button and drift back to sleep...")
@@ -103,9 +112,14 @@ def snooze_choice(is_workday):
         if choice == '1':
             print_divider()
             print_slow("You rush through your morning routine.")
-            print_slow("You make it to work just in time, but you're exhausted.")
-            print_slow("\nYou survived the day, barely!")
-            return "rushed_workday"
+            if work_location == 'office':
+                print_slow("You barely make it to the office on time, but you're exhausted.")
+                print_slow("The commute while stressed was rough!")
+                return "rushed_office_day"
+            else:  # WFH
+                print_slow("At least you're working from home - no commute!")
+                print_slow("You log in just in time, still in your pajamas.")
+                return "rushed_wfh_day"
         else:
             print_divider()
             print_slow("You call your boss and fake a cough.")
@@ -119,7 +133,7 @@ def snooze_choice(is_workday):
         return "relaxed_weekend"
 
 
-def check_phone_choice(is_workday):
+def check_phone_choice(is_workday, work_location=None):
     """Handle checking phone choice."""
     print_divider()
     print_slow("You grab your phone from the nightstand.")
@@ -137,14 +151,24 @@ def check_phone_choice(is_workday):
         if choice == '1':
             print_divider()
             print_slow("You spend an hour working from bed.")
-            print_slow("You finish the report but now you're definitely late!")
-            print_slow("At least your boss is happy...")
-            return "productive_but_late"
+            if work_location == 'office':
+                print_slow("You finish the report but now you're definitely late!")
+                print_slow("At least your boss is happy... but the commute will be rushed.")
+                return "productive_but_late_office"
+            else:  # WFH
+                print_slow("You finish the report and just walk to your home office.")
+                print_slow("Your boss is happy and you didn't even need to change!")
+                return "productive_wfh_day"
         else:
             print_divider()
-            print_slow("You decide it can wait until you get to the office.")
-            print_slow("You get ready at your own pace and have a calm morning.")
-            return "balanced_workday"
+            if work_location == 'office':
+                print_slow("You decide it can wait until you get to the office.")
+                print_slow("You get ready at your own pace and have a calm morning commute.")
+                return "balanced_office_day"
+            else:  # WFH
+                print_slow("You decide it can wait until you log in.")
+                print_slow("You make a nice breakfast first - perks of working from home!")
+                return "balanced_wfh_day"
     else:
         print_slow("\nYou see messages from friends wanting to hang out!")
         print_slow("'Beach day? Coffee? Movie marathon?'")
@@ -166,7 +190,7 @@ def check_phone_choice(is_workday):
             return "peaceful_weekend"
 
 
-def exercise_choice(is_workday):
+def exercise_choice(is_workday, work_location=None):
     """Handle morning exercise choice."""
     print_divider()
     print_slow("You roll out of bed and stretch your arms above your head.")
@@ -184,15 +208,25 @@ def exercise_choice(is_workday):
         if choice == '1':
             print_divider()
             print_slow("You blend up a delicious smoothie.")
-            print_slow("You arrive at work early, energized, and ready!")
-            print_slow("Your colleagues comment on your positive energy.")
-            return "perfect_workday"
+            if work_location == 'office':
+                print_slow("You arrive at the office early, energized, and ready!")
+                print_slow("Your colleagues comment on your positive energy.")
+                return "perfect_office_day"
+            else:  # WFH
+                print_slow("You start your work-from-home day feeling energized!")
+                print_slow("You're productive and focused all day.")
+                return "perfect_wfh_day"
         else:
             print_divider()
             print_slow("You take your time making a delicious breakfast.")
-            print_slow("You enjoy every bite and still get to work on time.")
-            print_slow("It's a great start to your day!")
-            return "great_workday"
+            if work_location == 'office':
+                print_slow("You enjoy every bite and still make it to the office on time.")
+                print_slow("It's a great start to your day!")
+                return "great_office_day"
+            else:  # WFH
+                print_slow("You enjoy every bite at your own pace.")
+                print_slow("You log in on time, relaxed and happy. WFH mornings are the best!")
+                return "great_wfh_day"
     else:
         print_slow("\nYou feel motivated to make the most of your free day!")
         print("\nWhat do you want to do?")
