@@ -40,6 +40,8 @@ def wake_up_scene(is_workday):
     time.sleep(0.5)
 
     work_location = None
+    is_school_day = False
+
     if is_workday:
         # Determine which day of the week it is
         day_of_week = random.choice(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'])
@@ -49,6 +51,11 @@ def wake_up_scene(is_workday):
         if day_of_week in ['Tuesday', 'Wednesday', 'Thursday']:
             work_location = 'office'
             print_slow("You need to be at the office by 9 AM.")
+
+            # On office days, randomly determine if it's a school day
+            is_school_day = random.choice([True, False])
+            if is_school_day:
+                print_slow("And the kids have school today!")
         else:
             work_location = 'wfh'
             print_slow("You're working from home today - no commute!")
@@ -57,11 +64,16 @@ def wake_up_scene(is_workday):
         print_slow("No obligations today - the whole day is yours!")
 
     print_divider()
-    return morning_routine(is_workday, work_location)
+    return morning_routine(is_workday, work_location, is_school_day)
 
 
-def morning_routine(is_workday, work_location=None):
+def morning_routine(is_workday, work_location=None, is_school_day=False):
     """Handle the morning routine choices."""
+
+    # Special school day breakfast routine for office days
+    if is_workday and work_location == 'office' and is_school_day:
+        return school_day_breakfast()
+
     print_slow("What do you want to do first?")
 
     if is_workday:
@@ -91,6 +103,96 @@ def morning_routine(is_workday, work_location=None):
             return check_on_kids()
         else:
             return let_koda_out()
+
+
+def school_day_breakfast():
+    """Handle school day breakfast choices."""
+    print_slow("You need to get the kids ready for school and yourself ready for work!")
+    print_slow("What's the breakfast plan?")
+    print("\n1. Cook breakfast")
+    print("2. Cereal for breakfast")
+    print("3. Go to the grocery store and Jack In The Box to get breakfast")
+
+    choice = get_choice(['1', '2', '3'])
+
+    if choice == '1':
+        print_divider()
+        print_slow("You head to the kitchen and start cooking.")
+        print_slow("You make scrambled eggs, toast, and some fruit.")
+        time.sleep(0.5)
+        print_slow("\nThe kids come down and enjoy the hot breakfast.")
+        print_slow("It takes a bit longer, but everyone leaves happy and full!")
+        print("\nWhat happens next?")
+        print("1. You're running a bit late but feeling good")
+        print("2. You rushed and made it on time")
+
+        sub_choice = get_choice(['1', '2'])
+
+        if sub_choice == '1':
+            print_divider()
+            print_slow("You drop the kids off at school with minutes to spare.")
+            print_slow("You arrive at the office a few minutes late, but the home-cooked meal was worth it.")
+            print_slow("The kids text you a heart emoji at lunch!")
+            return "loving_parent_late_to_office"
+        else:
+            print_divider()
+            print_slow("You somehow managed to cook, eat, and get everyone ready on time!")
+            print_slow("You're a breakfast superhero. The kids and your boss are both happy.")
+            return "superhero_parent_office_day"
+
+    elif choice == '2':
+        print_divider()
+        print_slow("You pour cereal for everyone - quick and easy!")
+        print_slow("The kids are happy with their sugary cereal choice.")
+        time.sleep(0.5)
+        print_slow("\nYou have plenty of time to get ready.")
+        print("\nWhat do you do with the extra time?")
+        print("1. Help the kids with their homework they forgot about")
+        print("2. Actually enjoy your coffee in peace")
+
+        sub_choice = get_choice(['1', '2'])
+
+        if sub_choice == '1':
+            print_divider()
+            print_slow("You help them finish up their homework quickly.")
+            print_slow("Crisis averted! You drop them off at school with homework in hand.")
+            print_slow("You get to the office on time and feeling like parent of the year!")
+            return "homework_hero_office_day"
+        else:
+            print_divider()
+            print_slow("You savor your coffee and enjoy the morning chaos.")
+            print_slow("Everyone gets out the door on time and stress-free.")
+            print_slow("You arrive at the office early and relaxed. Perfect morning!")
+            return "peaceful_school_morning_office_day"
+
+    else:  # choice == '3'
+        print_divider()
+        print_slow("You load the kids in the car and head out.")
+        print_slow("First stop: grocery store for essentials.")
+        time.sleep(0.5)
+        print_slow("The kids grab snacks while you grab milk and bread.")
+        print_slow("\nNext stop: Jack In The Box!")
+        print_slow("Everyone orders their breakfast favorites.")
+        print("\nHow does it go?")
+        print("1. Smooth and quick - everyone's happy")
+        print("2. The drive-thru is slow and you're cutting it close")
+
+        sub_choice = get_choice(['1', '2'])
+
+        if sub_choice == '1':
+            print_divider()
+            print_slow("The line moves fast and you get your food quickly.")
+            print_slow("The kids eat in the car on the way to school.")
+            print_slow("You drop them off, finish your breakfast, and make it to work on time.")
+            print_slow("Groceries done, everyone fed, and you're a multitasking champion!")
+            return "multitasking_champion_office_day"
+        else:
+            print_divider()
+            print_slow("Of course the line is long today...")
+            print_slow("You're stressed but the kids are oblivious, enjoying their food.")
+            print_slow("You drop them off just in time but you're definitely late to the office.")
+            print_slow("At least you got groceries done and everyone ate!")
+            return "chaotic_but_fed_office_day"
 
 
 def snooze_choice(is_workday, work_location=None):
