@@ -60,7 +60,9 @@ def wake_up_scene(is_workday):
             work_location = 'wfh'
             print_slow("You're working from home today - no commute!")
     else:
-        print_slow("\nYou remember... it's a WEEKEND!")
+        # Determine which weekend day it is
+        day_of_week = random.choice(['Saturday', 'Sunday'])
+        print_slow(f"\nYou remember... it's a {day_of_week}!")
         print_slow("No obligations today - the whole day is yours!")
 
     print_divider()
