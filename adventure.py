@@ -36,7 +36,7 @@ def wake_up_scene(is_workday):
     """The initial wake-up scene."""
     print_divider()
     print_slow("You slowly open your eyes as sunlight filters through the curtains.")
-    print_slow("Your alarm buzzes insistently on the nightstand.")
+    print_slow("The alarm on your iPhone buzzes insistently on the nightstand.")
     time.sleep(0.5)
 
     work_location = None
