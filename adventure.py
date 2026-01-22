@@ -694,7 +694,7 @@ def let_koda_out():
 def main():
     """Main game function."""
     print_divider()
-    print_slow("Welcome to 'A Day in the Life' - A Text Adventure Game", delay=0.05)
+    print_slow("Welcome to 'A Day in Daddy's Life' - A Text Adventure Game", delay=0.05)
     print_divider()
 
     time.sleep(0.5)
