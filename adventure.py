@@ -100,6 +100,10 @@ def morning_routine(is_workday, work_location=None, is_school_day=False, is_summ
     if is_workday and work_location == 'office' and is_summer_vacation:
         return summer_vacation_morning()
 
+    # Special WFH morning routine (Mon/Fri)
+    if is_workday and work_location == 'wfh':
+        return wfh_morning()
+
     # Special winter cabin routine
     if not is_workday and at_cabin:
         return cabin_weekend_morning()
@@ -140,6 +144,92 @@ def morning_routine(is_workday, work_location=None, is_school_day=False, is_summ
             return check_on_kids()
         else:
             return let_koda_out()
+
+
+def wfh_morning():
+    """Handle work-from-home morning routine."""
+    print_slow("It's a work-from-home day - no commute needed!")
+    print_slow("What do you want to do first?")
+    print("\n1. Get up and cook breakfast")
+    print("2. Hit snooze and cuddle with Mommy some more")
+    print("3. Get up and clean up the kitchen a bit before cooking breakfast")
+
+    choice = get_choice(['1', '2', '3'])
+
+    if choice == '1':
+        print_divider()
+        print_slow("You quietly get out of bed and head to the kitchen.")
+        print_slow("You start making a nice breakfast for everyone.")
+        time.sleep(0.5)
+        print_slow("\nThe smell of cooking wakes up the family.")
+        print("\nWhat do you make?")
+        print("1. Pancakes and bacon")
+        print("2. Eggs and toast")
+
+        sub_choice = get_choice(['1', '2'])
+
+        if sub_choice == '1':
+            print_divider()
+            print_slow("You flip pancakes and cook bacon until everything is perfect.")
+            print_slow("The family comes down to a delicious breakfast!")
+            print_slow("You start work feeling like a breakfast champion.")
+            return "wfh_breakfast_hero_day"
+        else:
+            print_divider()
+            print_slow("You make a simple but delicious eggs and toast.")
+            print_slow("Everyone enjoys the meal and you still have time before work.")
+            print_slow("You log in feeling relaxed and ready!")
+            return "wfh_simple_breakfast_day"
+
+    elif choice == '2':
+        print_divider()
+        print_slow("You hit snooze and snuggle up closer to Mommy.")
+        print_slow("You both enjoy the peaceful morning together.")
+        time.sleep(0.5)
+        print_slow("\nIt's so nice to have this time together on a work morning!")
+        print("\nWhat happens?")
+        print("1. You both fall back asleep for a bit")
+        print("2. You chat and enjoy the quiet time")
+
+        sub_choice = get_choice(['1', '2'])
+
+        if sub_choice == '1':
+            print_divider()
+            print_slow("You both doze off again...")
+            print_slow("You wake up 20 minutes later, still cozy and happy.")
+            print_slow("You have a quick breakfast and log in to work a bit late, but it was worth it!")
+            return "wfh_cuddle_snooze_day"
+        else:
+            print_divider()
+            print_slow("You talk about the day ahead and just enjoy being together.")
+            print_slow("Eventually you get up, make breakfast, and start work on time.")
+            print_slow("Starting the day connected makes everything better!")
+            return "wfh_quality_time_day"
+
+    else:  # choice == '3'
+        print_divider()
+        print_slow("You get up and head to the kitchen.")
+        print_slow("You start tidying up - dishes in the dishwasher, wiping counters.")
+        time.sleep(0.5)
+        print_slow("\nThe kitchen looks much better!")
+        print("\nWhat do you do next?")
+        print("1. Make a nice breakfast now that the kitchen is clean")
+        print("2. Make a quick smoothie and get to work early")
+
+        sub_choice = get_choice(['1', '2'])
+
+        if sub_choice == '1':
+            print_divider()
+            print_slow("With a clean kitchen, cooking is so much nicer!")
+            print_slow("You make a great breakfast and the family loves it.")
+            print_slow("You start work feeling accomplished and organized.")
+            return "wfh_organized_breakfast_day"
+        else:
+            print_divider()
+            print_slow("You make a quick smoothie in your now-clean kitchen.")
+            print_slow("You log in early and get a head start on work.")
+            print_slow("Clean kitchen AND productive morning - winning!")
+            return "wfh_early_productive_day"
 
 
 def bike_to_work():
