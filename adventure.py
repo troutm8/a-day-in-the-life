@@ -111,14 +111,21 @@ def morning_routine(is_workday, work_location=None, is_school_day=False, is_summ
         print("2. Get up immediately and check your phone")
         print("3. Stretch and do some morning exercises")
 
-        choice = get_choice(['1', '2', '3'])
+        # Add bike option for office days only
+        if work_location == 'office':
+            print("4. Get ready to ride your bike to work")
+            choice = get_choice(['1', '2', '3', '4'])
+        else:
+            choice = get_choice(['1', '2', '3'])
 
         if choice == '1':
             return snooze_choice(is_workday, work_location)
         elif choice == '2':
             return check_phone_choice(is_workday, work_location)
-        else:
+        elif choice == '3':
             return exercise_choice(is_workday, work_location)
+        else:  # choice == '4' - bike to work
+            return bike_to_work()
     else:
         # Weekend choices - personalized!
         print("\n1. Hit snooze and sleep a bit more")
@@ -133,6 +140,89 @@ def morning_routine(is_workday, work_location=None, is_school_day=False, is_summ
             return check_on_kids()
         else:
             return let_koda_out()
+
+
+def bike_to_work():
+    """Handle bike commute to work."""
+    print_divider()
+    print_slow("You decide to bike to work today!")
+    print_slow("You get dressed in your cycling gear and prep your bike.")
+    time.sleep(0.5)
+
+    # Random weather/scenario
+    scenario = random.choice(['perfect_weather', 'headwind', 'see_coworker'])
+
+    if scenario == 'perfect_weather':
+        print_slow("\nThe weather is absolutely perfect for a ride!")
+        print_slow("You clip in and start pedaling.")
+        time.sleep(0.5)
+        print_slow("\nThe ride is smooth and enjoyable.")
+        print("\nHow do you approach the ride?")
+        print("1. Take it easy and enjoy the scenery")
+        print("2. Push hard and get a good workout")
+
+        choice = get_choice(['1', '2'])
+
+        if choice == '1':
+            print_divider()
+            print_slow("You cruise along at a comfortable pace.")
+            print_slow("You arrive at the office feeling refreshed and energized!")
+            print_slow("Your coworkers comment on how relaxed you look.")
+            return "leisurely_bike_commute_day"
+        else:
+            print_divider()
+            print_slow("You push your pace and get your heart rate up!")
+            print_slow("You arrive at the office early, sweaty but accomplished.")
+            print_slow("You've already got your workout done for the day!")
+            return "workout_bike_commute_day"
+
+    elif scenario == 'headwind':
+        print_slow("\nUgh, there's a strong headwind today.")
+        print_slow("Every pedal stroke is harder than usual.")
+        time.sleep(0.5)
+        print_slow("\nYou're working way harder than you planned!")
+        print("\nWhat do you do?")
+        print("1. Push through it - you're committed now")
+        print("2. Take your time and don't stress about it")
+
+        choice = get_choice(['1', '2'])
+
+        if choice == '1':
+            print_divider()
+            print_slow("You dig deep and power through the headwind.")
+            print_slow("You arrive exhausted but proud of your effort!")
+            print_slow("That was way harder than driving, but you feel tough!")
+            return "challenging_bike_commute_day"
+        else:
+            print_divider()
+            print_slow("You shift to an easier gear and just take your time.")
+            print_slow("You arrive a bit late but the ride was still worth it.")
+            print_slow("At least you didn't stress yourself out!")
+            return "slow_bike_commute_day"
+
+    else:  # see_coworker
+        print_slow("\nYou're cruising along when you spot a coworker also biking!")
+        print_slow("They wave and speed up to ride alongside you.")
+        time.sleep(0.5)
+        print_slow("\nYou chat about work and life as you ride together.")
+        print("\nWhat happens?")
+        print("1. You enjoy the company and ride together all the way")
+        print("2. They're faster than you and you try to keep up")
+
+        choice = get_choice(['1', '2'])
+
+        if choice == '1':
+            print_divider()
+            print_slow("You ride together at a comfortable pace.")
+            print_slow("You arrive at the office having had a great conversation!")
+            print_slow("Bike commuting just became even better with a riding buddy!")
+            return "social_bike_commute_day"
+        else:
+            print_divider()
+            print_slow("You try to match their pace but it's tough!")
+            print_slow("You're breathing hard but manage to keep up.")
+            print_slow("You arrive at work way more tired than planned, but impressed with yourself!")
+            return "competitive_bike_commute_day"
 
 
 def summer_vacation_morning():
