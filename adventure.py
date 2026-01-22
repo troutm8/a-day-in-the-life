@@ -39,42 +39,70 @@ def wake_up_scene(is_workday):
     print_slow("The alarm on your iPhone buzzes insistently on the nightstand.")
     time.sleep(0.5)
 
+    # Determine the season
+    season = random.choice(['Spring', 'Summer', 'Fall', 'Winter'])
+    print_slow(f"\nYou look outside... it's {season}.")
+
     work_location = None
     is_school_day = False
+    is_summer_vacation = False
+    at_cabin = False
 
     if is_workday:
         # Determine which day of the week it is
         day_of_week = random.choice(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'])
-        print_slow(f"\nYou remember... it's a {day_of_week}!")
+        print_slow(f"You remember... it's a {day_of_week}!")
 
         # Office days: Tue, Wed, Thu | WFH days: Mon, Fri
         if day_of_week in ['Tuesday', 'Wednesday', 'Thursday']:
             work_location = 'office'
             print_slow("You need to be at the office by 9 AM.")
 
-            # On office days, randomly determine if it's a school day
-            is_school_day = random.choice([True, False])
-            if is_school_day:
-                print_slow("And the kids have school today!")
+            # In Summer, kids are on summer vacation
+            if season == 'Summer':
+                is_summer_vacation = True
+                print_slow("The kids are on summer vacation!")
+            else:
+                # On office days (non-summer), randomly determine if it's a school day
+                is_school_day = random.choice([True, False])
+                if is_school_day:
+                    print_slow("And the kids have school today!")
         else:
             work_location = 'wfh'
             print_slow("You're working from home today - no commute!")
     else:
         # Determine which weekend day it is
         day_of_week = random.choice(['Saturday', 'Sunday'])
-        print_slow(f"\nYou remember... it's a {day_of_week}!")
-        print_slow("No obligations today - the whole day is yours!")
+        print_slow(f"You remember... it's a {day_of_week}!")
+
+        # In Winter, randomly determine if at the cabin
+        if season == 'Winter':
+            at_cabin = random.choice([True, False])
+            if at_cabin:
+                print_slow("You're at the cabin in the mountains!")
+            else:
+                print_slow("No obligations today - the whole day is yours!")
+        else:
+            print_slow("No obligations today - the whole day is yours!")
 
     print_divider()
-    return morning_routine(is_workday, work_location, is_school_day)
+    return morning_routine(is_workday, work_location, is_school_day, is_summer_vacation, at_cabin)
 
 
-def morning_routine(is_workday, work_location=None, is_school_day=False):
+def morning_routine(is_workday, work_location=None, is_school_day=False, is_summer_vacation=False, at_cabin=False):
     """Handle the morning routine choices."""
 
-    # Special school day breakfast routine for office days
+    # Special school day breakfast routine for office days (non-summer)
     if is_workday and work_location == 'office' and is_school_day:
         return school_day_breakfast()
+
+    # Special summer vacation routine - walk Koda before work
+    if is_workday and work_location == 'office' and is_summer_vacation:
+        return summer_vacation_morning()
+
+    # Special winter cabin routine
+    if not is_workday and at_cabin:
+        return cabin_weekend_morning()
 
     print_slow("What do you want to do first?")
 
@@ -105,6 +133,166 @@ def morning_routine(is_workday, work_location=None, is_school_day=False):
             return check_on_kids()
         else:
             return let_koda_out()
+
+
+def summer_vacation_morning():
+    """Handle summer vacation morning routine - walk Koda before work."""
+    print_slow("The kids are sleeping in - it's summer vacation!")
+    print_slow("You have some extra time this morning.")
+    print_slow("\nWhat do you want to do?")
+    print("\n1. Take Koda for a walk before work")
+    print("2. Let the kids sleep and enjoy a quiet breakfast")
+    print("3. Wake the kids up for a family breakfast")
+
+    choice = get_choice(['1', '2', '3'])
+
+    if choice == '1':
+        print_divider()
+        print_slow("You grab Koda's leash and head out for a morning walk.")
+        print_slow("The summer air is perfect, and Koda is thrilled!")
+        time.sleep(0.5)
+        print_slow("\nYou walk through the neighborhood, enjoying the quiet morning.")
+        print("\nHow long do you walk?")
+        print("1. Quick 15-minute walk")
+        print("2. Full 30-minute walk")
+
+        sub_choice = get_choice(['1', '2'])
+
+        if sub_choice == '1':
+            print_divider()
+            print_slow("You keep it short but sweet.")
+            print_slow("Koda got his exercise and you still have plenty of time!")
+            print_slow("You arrive at the office on time and energized.")
+            return "summer_dog_walk_perfect_day"
+        else:
+            print_divider()
+            print_slow("You enjoy the full walk with Koda.")
+            print_slow("It's so nice out that you lose track of time!")
+            print_slow("You're a bit rushed getting to work, but it was worth it.")
+            return "summer_dog_walk_late_day"
+
+    elif choice == '2':
+        print_divider()
+        print_slow("You make yourself a nice breakfast in the peaceful house.")
+        print_slow("You sip your coffee and enjoy the quiet before work.")
+        time.sleep(0.5)
+        print_slow("\nThe kids wake up just as you're leaving.")
+        print_slow("You give them hugs and head to the office feeling relaxed!")
+        return "peaceful_summer_morning_office"
+
+    else:  # choice == '3'
+        print_divider()
+        print_slow("You wake the kids up for a family breakfast.")
+        print_slow("They're groggy but happy to see you!")
+        time.sleep(0.5)
+        print_slow("\nYou make pancakes together - a summer tradition.")
+        print("\nWhat happens next?")
+        print("1. You're running late but it was worth it")
+        print("2. You rush through and make it on time")
+
+        sub_choice = get_choice(['1', '2'])
+
+        if sub_choice == '1':
+            print_divider()
+            print_slow("The family breakfast took longer than expected.")
+            print_slow("You arrive at work late but with a full heart.")
+            print_slow("The kids text you photos of their day later!")
+            return "summer_family_breakfast_late"
+        else:
+            print_divider()
+            print_slow("You speed through breakfast but make it count.")
+            print_slow("Everyone's happy and you make it to work on time!")
+            return "summer_family_breakfast_perfect"
+
+
+def cabin_weekend_morning():
+    """Handle winter cabin weekend morning - skiing with kids."""
+    print_slow("You're at the cabin and the snow looks perfect!")
+    print_slow("The kids are already excited about the day.")
+    print_slow("\nWhat's the plan?")
+    print("\n1. Take the kids skiing")
+    print("2. Build a snowman with the kids")
+    print("3. Cozy day inside by the fireplace")
+
+    choice = get_choice(['1', '2', '3'])
+
+    if choice == '1':
+        print_divider()
+        print_slow("You bundle everyone up and head to the slopes!")
+        print_slow("The kids are so excited they can barely sit still.")
+        time.sleep(0.5)
+        print_slow("\nYou spend the day skiing together.")
+        print("\nHow does it go?")
+        print("1. Everyone has a blast - perfect ski day")
+        print("2. One kid falls and you spend time in the lodge")
+
+        sub_choice = get_choice(['1', '2'])
+
+        if sub_choice == '1':
+            print_divider()
+            print_slow("The conditions are perfect and everyone skis well!")
+            print_slow("You take family photos on the mountain.")
+            print_slow("Later, you all enjoy hot chocolate by the fire.")
+            print_slow("This is what cabin weekends are all about!")
+            return "perfect_cabin_ski_day"
+        else:
+            print_divider()
+            print_slow("One of the kids takes a tumble - nothing serious!")
+            print_slow("You spend the afternoon in the lodge with hot cocoa.")
+            print_slow("They're disappointed but you make it fun anyway.")
+            return "cabin_ski_day_with_break"
+
+    elif choice == '2':
+        print_divider()
+        print_slow("You all head outside to build a snowman!")
+        print_slow("The kids are creative and want to make it huge.")
+        time.sleep(0.5)
+        print_slow("\nYou work together and build an amazing snowman.")
+        print_slow("The neighbors come out to see your creation!")
+        print("\nWhat do you do next?")
+        print("1. Have a snowball fight")
+        print("2. Head inside for hot chocolate")
+
+        sub_choice = get_choice(['1', '2'])
+
+        if sub_choice == '1':
+            print_divider()
+            print_slow("Epic snowball fight ensues!")
+            print_slow("Everyone is laughing and covered in snow.")
+            print_slow("You all head inside cold but happy. Perfect day!")
+            return "cabin_snowball_fight_day"
+        else:
+            print_divider()
+            print_slow("You head inside and make hot chocolate together.")
+            print_slow("You add marshmallows and whipped cream!")
+            print_slow("Everyone's warm and happy. Great cabin day!")
+            return "cabin_snowman_cocoa_day"
+
+    else:  # choice == '3'
+        print_divider()
+        print_slow("You decide to stay cozy inside today.")
+        print_slow("You light the fireplace and the cabin gets warm and toasty.")
+        time.sleep(0.5)
+        print_slow("\nThe kids want to play board games.")
+        print("\nWhat do you play?")
+        print("1. Monopoly - the classic")
+        print("2. A quick card game")
+
+        sub_choice = get_choice(['1', '2'])
+
+        if sub_choice == '1':
+            print_divider()
+            print_slow("You start a game of Monopoly...")
+            print_slow("Three hours later, you're still playing!")
+            print_slow("Someone flips the board but everyone's laughing.")
+            print_slow("It's a hilarious cabin memory!")
+            return "cabin_monopoly_chaos_day"
+        else:
+            print_divider()
+            print_slow("You play several rounds of cards.")
+            print_slow("The kids are competitive but it's all in good fun!")
+            print_slow("Perfect relaxing cabin day by the fire.")
+            return "cabin_cozy_card_games_day"
 
 
 def school_day_breakfast():
